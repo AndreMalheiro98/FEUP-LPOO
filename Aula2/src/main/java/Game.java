@@ -12,8 +12,7 @@ public class Game {
     /*-----------------------------Class Variables-----------------------------*/
     private Screen screen;
     private boolean runTime;
-    private int x;
-    private int y;
+    private Hero hero;
 
     /*-----------------------------Class Variables Setters and Getters---------*/
         public boolean getRunTime(){
@@ -24,8 +23,7 @@ public class Game {
         }
     /*-----------------------------Class constructor---------------------------*/
     public Game(){
-        this.x=10;
-        this.y=10;
+        this.hero=new Hero(10,10);
         this.runTime=true;
         try {
             TerminalSize terminalSize = new TerminalSize(50, 30);
@@ -48,23 +46,23 @@ public class Game {
             this.screen.clear();
             KeyStroke key= screen.readInput();
             this.processKey(key);
-            this.screen.setCharacter(this.x, this.y, TextCharacter.fromCharacter('X')[0]);
+            this.hero.draw(this.screen);
             this.screen.refresh();
     }
 
     private void processKey(KeyStroke key) throws IOException {
         switch (key.getKeyType()){
             case ArrowLeft:
-                this.x--;
+                this.hero.moveHero(this.hero.moveLeft());
                 break;
             case ArrowRight:
-                this.x++;
+                this.hero.moveHero(this.hero.moveRight());
                 break;
             case ArrowUp:
-                this.y--;
+                this.hero.moveHero(this.hero.moveUp());
                 break;
             case ArrowDown:
-                this.y++;
+                this.hero.moveHero(this.hero.moveDown());
                 break;
             case Character:
                 if(key.getCharacter()=='q')
