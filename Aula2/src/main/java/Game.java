@@ -1,8 +1,4 @@
-import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
-import com.googlecode.lanterna.TextCharacter;
-import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -40,9 +36,8 @@ public class Game {
             this.screen.startScreen();             // screens must be started
 
             this.screen.doResizeIfNecessary();     // resize screen if necessary
-           /* TextGraphics graphics=screen.newTextGraphics();
-            graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-            graphics.fillRectangle(new TerminalPosition(0,0),new TerminalSize(width,height),' ');*/
+            this.arena.draw(screen.newTextGraphics());
+            this.screen.refresh();
 
         }catch (IOException e){
             e.printStackTrace();
