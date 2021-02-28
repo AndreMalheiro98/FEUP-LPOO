@@ -1,5 +1,8 @@
+import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextCharacter;
+import com.googlecode.lanterna.TextColor;
+import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
@@ -12,7 +15,7 @@ public class Game {
     /*-----------------------------Class Variables-----------------------------*/
     private Screen screen;
     private boolean runTime;
-    private Hero hero;
+    private Arena arena;
 
     /*-----------------------------Class Variables Setters and Getters---------*/
         public boolean getRunTime(){
@@ -23,10 +26,12 @@ public class Game {
         }
     /*-----------------------------Class constructor---------------------------*/
     public Game(){
-        this.hero=new Hero(10,10);
+        this.arena=new Arena(25,25);
         this.runTime=true;
+
         try {
-            TerminalSize terminalSize = new TerminalSize(50, 30);
+            int width=50,height=30;
+            TerminalSize terminalSize = new TerminalSize(width, height);
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
             Terminal terminal = terminalFactory.createTerminal();
             this.screen=new TerminalScreen(terminal);
@@ -35,6 +40,9 @@ public class Game {
             this.screen.startScreen();             // screens must be started
 
             this.screen.doResizeIfNecessary();     // resize screen if necessary
+           /* TextGraphics graphics=screen.newTextGraphics();
+            graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+            graphics.fillRectangle(new TerminalPosition(0,0),new TerminalSize(width,height),' ');*/
 
         }catch (IOException e){
             e.printStackTrace();
@@ -45,36 +53,18 @@ public class Game {
     private void draw() throws IOException{
             this.screen.clear();
             KeyStroke key= screen.readInput();
-            this.processKey(key);
-            this.hero.draw(this.screen);
-            this.screen.refresh();
+            int aux=this.arena.processKey(key);
+            if(aux==-1)
+                this.setRunTime(false);
+            else if(aux==-2)
+                this.screen.close();
+            else{
+                this.arena.draw(screen.newTextGraphics());
+                this.screen.refresh();
+            }
     }
 
-    private void processKey(KeyStroke key) throws IOException {
-        switch (key.getKeyType()){
-            case ArrowLeft:
-                this.hero.moveHero(this.hero.moveLeft());
-                break;
-            case ArrowRight:
-                this.hero.moveHero(this.hero.moveRight());
-                break;
-            case ArrowUp:
-                this.hero.moveHero(this.hero.moveUp());
-                break;
-            case ArrowDown:
-                this.hero.moveHero(this.hero.moveDown());
-                break;
-            case Character:
-                if(key.getCharacter()=='q')
-                    this.screen.close();
-                break;
-            case EOF:
-                this.setRunTime(false);
-                break;
-            default:
-                break;
-        }
-    }
+
 
     public void run(){
         while(this.getRunTime()){
