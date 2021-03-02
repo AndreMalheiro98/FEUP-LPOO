@@ -1,6 +1,8 @@
-import java.util.Random;
+package Characters;
 
-public class Monster extends Element{
+import Primitives.*;
+
+public class Monster extends Element {
     private static final int MOVE_LEFT=0;
     private static final int MOVE_UP=1;
     private static final int MOVE_RIGHT=2;

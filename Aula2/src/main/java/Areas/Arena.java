@@ -1,3 +1,8 @@
+package Areas;
+
+import Characters.*;
+import Items.Coin;
+import Primitives.Position;
 import com.googlecode.lanterna.TerminalPosition;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
@@ -91,7 +96,7 @@ public class Arena {
         if(heroAlive)
             return 0;
         else {
-            System.out.println("Hero died");
+            System.out.println("Characters.Hero died");
             return -2;
         }
     }

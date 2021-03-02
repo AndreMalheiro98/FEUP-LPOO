@@ -1,6 +1,8 @@
-import com.googlecode.lanterna.graphics.TextGraphics;
+package Items;
 
-public class Coin extends Element{
+import Primitives.Element;
+
+public class Coin extends Element {
 
     private String elementCharacter;
     public Coin(int x,int y,String c){

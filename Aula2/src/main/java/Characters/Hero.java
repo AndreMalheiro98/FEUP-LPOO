@@ -1,16 +1,16 @@
-import com.googlecode.lanterna.SGR;
-import com.googlecode.lanterna.TerminalPosition;
-import com.googlecode.lanterna.TextColor;
-import com.googlecode.lanterna.graphics.TextGraphics;
+package Characters;
 
-public class Hero extends Element{
-    /*--------------------Hero Variables and Setters/Getters/Constructor---------------*/
+import Primitives.Element;
+import Primitives.Position;
+
+public class Hero extends Element {
+    /*--------------------Characters.Hero Variables and Setters/Getters/Constructor---------------*/
 
     public Hero(int x, int y) {
         super(x,y);
     }
 
-    /*----------------------Hero functions---------------------*/
+    /*----------------------Characters.Hero functions---------------------*/
     public void moveHero(Position position){
         this.setPosition(position);
     }
