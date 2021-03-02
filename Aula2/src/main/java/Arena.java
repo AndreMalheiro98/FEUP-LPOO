@@ -14,6 +14,9 @@ public class Arena {
     private Hero hero;
     private List<Wall> walls;
     private List<Coin> coins;
+    private Monster monster;
+    private static final boolean HERO_DEATH=false;
+    private static final boolean HERO_LIVES=true;
 
     public Arena(int height,int width){
         this.width=width;
@@ -21,6 +24,7 @@ public class Arena {
         this.hero=new Hero(this.width/2,this.height/2);
         this.walls=createWalls();
         this.coins=createCoins();
+        this.monster=new Monster(1,1);
     }
 
     private List<Wall> createWalls(){
@@ -59,18 +63,23 @@ public class Arena {
     }
 
     public int processKey(KeyStroke key) throws IOException {
+        boolean heroAlive=true;
         switch (key.getKeyType()){
             case ArrowLeft:
-                this.moveHero(this.hero.moveLeft());
+                if(this.moveCharacters(this.hero.moveLeft(),this.monster.move(this.hero.getPosition()))==HERO_DEATH)
+                    heroAlive=false;
                 break;
             case ArrowRight:
-                this.moveHero(this.hero.moveRight());
+                if(this.moveCharacters(this.hero.moveRight(),this.monster.move(this.hero.getPosition()))==HERO_DEATH)
+                    heroAlive=false;
                 break;
             case ArrowUp:
-                this.moveHero(this.hero.moveUp());
+                if(this.moveCharacters(this.hero.moveUp(),this.monster.move(this.hero.getPosition()))==HERO_DEATH)
+                    heroAlive=false;
                 break;
             case ArrowDown:
-                this.moveHero(this.hero.moveDown());
+                if(this.moveCharacters(this.hero.moveDown(),this.monster.move(this.hero.getPosition()))==HERO_DEATH)
+                    heroAlive=false;
                 break;
             case Character:
                 return -2;
@@ -79,35 +88,62 @@ public class Arena {
             default:
                 break;
         }
-        return 0;
+        if(heroAlive)
+            return 0;
+        else {
+            System.out.println("Hero died");
+            return -2;
+        }
+    }
+
+    private boolean moveCharacters(Position possibleHeroNewPosition,Position possibleMonsterNewPosition){
+        this.moveHero(possibleHeroNewPosition);
+        if(verifyMonsterCollision())
+            return HERO_DEATH;
+        this.moveMonsters(possibleMonsterNewPosition);
+        if(verifyMonsterCollision())
+            return HERO_DEATH;
+        return HERO_LIVES;
     }
 
     public void draw(TextGraphics graphics){
         graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
         graphics.fillRectangle(new TerminalPosition(0,0),new TerminalSize(this.getWidth(),this.getHeight()),' ');
-        this.hero.draw(graphics,"#FFFF33","X");
+        this.hero.draw(graphics,"#FFFFFF","X");
         for(Wall wall: walls)
             wall.draw(graphics,"#FFFFFF",wall.getWallCharacter());
         for(Coin coin: coins)
-            coin.draw(graphics,"#FF0000",coin.getElementCharacter());
+            coin.draw(graphics,"#FFFF00",coin.getElementCharacter());
+        this.monster.draw(graphics,"#006600","&");
     }
 
     public void moveHero(Position position){
-        if(canHeroMove(position)) {
+        if(!verifiWallCollision(position)) {
             if(takesCoin(position))
                 System.out.println("Will add a point");
             this.hero.setPosition(position);
         }
+    }
+
+    private boolean verifyMonsterCollision(){
+        if(this.monster.getPosition().equals(this.hero.getPosition()))
+            return true;
+        return false;
+    }
+
+    private void moveMonsters(Position position){
+        if(!verifiWallCollision(position))
+            this.monster.setPosition(position);
 
     }
 
-    private boolean canHeroMove(Position position){
+    private boolean verifiWallCollision(Position position){
         for(Wall wall : this.walls){
             if(wall.getPosition().equals(position))
-                return false;
+                return true;
         }
 
-        return true;
+        return false;
     }
 
     private boolean takesCoin(Position position){
