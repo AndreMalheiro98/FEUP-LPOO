@@ -3,10 +3,6 @@ package Characters;
 import Primitives.*;
 
 public class Monster extends Element {
-    private static final int MOVE_LEFT=0;
-    private static final int MOVE_UP=1;
-    private static final int MOVE_RIGHT=2;
-    private static final int MOVE_DOWN=3;
 
     public Monster(int x,int y){
         super(x,y);
