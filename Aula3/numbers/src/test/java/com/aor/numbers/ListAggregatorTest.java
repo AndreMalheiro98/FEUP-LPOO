@@ -9,12 +9,7 @@ import java.util.List;
 public class ListAggregatorTest {
     @Test
     public void sum() {
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(4);
-        list.add(2);
-        list.add(5);
+        List<Integer> list=createLists();
 
         ListAggregator aggregator = new ListAggregator(list);
 
@@ -25,12 +20,7 @@ public class ListAggregatorTest {
 
     @Test
     public void max() {
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(4);
-        list.add(2);
-        list.add(5);
+        List<Integer> list=createLists();
 
         ListAggregator aggregator = new ListAggregator(list);
 
@@ -41,12 +31,7 @@ public class ListAggregatorTest {
 
     @Test
     public void min() {
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(4);
-        list.add(2);
-        list.add(5);
+        List<Integer> list=createLists();
 
         ListAggregator aggregator = new ListAggregator(list);
 
@@ -55,18 +40,46 @@ public class ListAggregatorTest {
         Assertions.assertEquals(1, min);
     }
 
+    public List<Integer> createLists(){
+        return List.of(1,2,4,2,5);
+    }
+
     @Test
-    public void distinct() {
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        list.add(2);
-        list.add(4);
-        list.add(2);
-        list.add(5);
+    public void confirmBugReport7263(){
+        List<Integer> list=new ArrayList<>();
+        list.add(-1);
+        list.add(-4);
+        list.add(-5);
+
+        ListAggregator listAggregator = new ListAggregator(list);
+
+        int max= listAggregator.max();
+        Assertions.assertEquals(-1,max);
+    }
+
+    class StubDeduplicator implements IListDeduplicator{
+        public List<Integer> deduplicate(IListSorter sorter){
+            return List.of(1,2,4,5);
+        }
+    }
+    @Test
+    public void confirmBugReport8726() {
+        List<Integer> list=List.of(1,2,4,2);
 
         ListAggregator aggregator = new ListAggregator(list);
 
-        int distinct = aggregator.distinct();
+        int distinct = aggregator.distinct(new StubDeduplicator());
+
+        Assertions.assertEquals(4, distinct);
+    }
+
+    @Test
+    public void distinct() {
+        List<Integer> list=createLists();
+
+        ListAggregator aggregator = new ListAggregator(list);
+
+        int distinct = aggregator.distinct(new StubDeduplicator());
 
         Assertions.assertEquals(4, distinct);
     }
