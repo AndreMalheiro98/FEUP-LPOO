@@ -1,3 +1,5 @@
+package Drinks;
+
 import javax.print.DocFlavor;
 
 public class StringDrink {

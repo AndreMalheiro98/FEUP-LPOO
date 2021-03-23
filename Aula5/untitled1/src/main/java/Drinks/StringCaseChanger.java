@@ -1,3 +1,5 @@
+package Drinks;
+
 public class StringCaseChanger implements StringTransformer{
 
     @Override

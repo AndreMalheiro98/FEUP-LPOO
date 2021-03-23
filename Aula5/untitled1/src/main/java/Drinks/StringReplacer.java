@@ -1,3 +1,5 @@
+package Drinks;
+
 public class StringReplacer implements StringTransformer{
     char oldChar,newChar;
 
