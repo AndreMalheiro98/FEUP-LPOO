@@ -7,7 +7,7 @@ public class ClientTest {
     @Test
     public void addObserver() {
          Bar bar = new StringBar();
-         
+
         HumanClient clientMock = Mockito.mock(HumanClient.class);
         bar.addObserver(clientMock);
 
