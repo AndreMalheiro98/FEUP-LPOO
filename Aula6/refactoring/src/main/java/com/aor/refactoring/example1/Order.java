@@ -15,12 +15,7 @@ public class Order {
     }
 
     public boolean isElegibleForFreeDelivery() {
-        double total = 0;
-
-        for (OrderLine line : lines)
-            total += line.product.getPrice() * line.quantity;
-
-        if (total > 100) return true;
+        if (getOrderPrice() > 100) return true;
         else return false;
     }
 
@@ -28,15 +23,20 @@ public class Order {
         StringBuffer printBuffer = new StringBuffer();
 
         for (OrderLine line : lines)
-            printBuffer.append(line.product.getName() + "(x" + line.quantity + "): " + (line.product.getPrice() * line.quantity) + "\n");
+            printBuffer.append(line.printOrderLine());
 
-        double total = 0;
-
-        for (OrderLine line : lines)
-            total += line.product.getPrice() * line.quantity;
-
-        printBuffer.append("Total: " + total);
+        printBuffer.append("Total: " + this.getOrderPrice());
 
         return printBuffer.toString();
     }
+
+    public double getOrderPrice(){
+        double total = 0;
+
+        for (OrderLine line : lines)
+            total += line.calculatePrice();
+
+        return total;
+    }
+
 }

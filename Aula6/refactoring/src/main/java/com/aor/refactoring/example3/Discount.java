@@ -19,7 +19,6 @@ public class Discount {
 
         if (fixed > 0) discountedPrice = fixed > price ? 0 : price - fixed;
         else if (percentage > 0) discountedPrice = price - price * percentage;
-        else discountedPrice = price;
 
         return discountedPrice;
     }
