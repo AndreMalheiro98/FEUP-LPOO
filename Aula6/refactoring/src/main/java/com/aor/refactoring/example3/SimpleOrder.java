@@ -16,6 +16,6 @@ public class SimpleOrder {
         if (discount == null)
             return price;
         else
-            return discount.applyDiscount(price);
+            return discount.apply(price);
     }
 }
